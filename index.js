@@ -1,5 +1,5 @@
 const express = require('express');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors');
 const app = express()
 const port = process.env.PORT || 5000;
@@ -34,6 +34,15 @@ async function run() {
         const result = await cursor.toArray()
         res.send(result)
     })
+
+
+    app.get('/products/:brandName', async (req, res) => {
+        const brandName = req.params.brandName;
+        const query = { brandName: brandName };
+        const result = await productCollection.find(query).toArray();
+        res.send(result);
+      });
+
 
     app.post('/products',  async(req, res)=>{
         const newProduct = req.body
