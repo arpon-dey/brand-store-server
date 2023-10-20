@@ -74,18 +74,25 @@ async function run() {
     });
     
 
-    // app.post('/myCart', async (req, res) => {
-    //     if (req.originalUrl === '/myCart') {
-    //         // Handle the request for adding to the cart
-    //         const myCart = req.body;
-    //         const result = await cartCollection.insertOne(myCart);
-    //         res.send(result);
-    //     } else if (req.originalUrl === '/products') {
-    //         const newProduct = req.body
-    //             const result = await productCollection.insertOne(newProduct)
-    //             res.send(result)
-    //     }
-    // });
+    app.put('/products/:brandName/:id', async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) }
+        const options = { upsert: true };
+        const updatedCart = req.body;
+
+        const product = {
+            $set: {
+                name: updatedCart.name,
+                productImg: updatedCart.productImg,
+                productType: updatedCart.productType,
+                price: updatedCart.price,
+                rating: updatedCart.rating
+            }
+        }
+
+        const result = await productCollection.updateOne(filter, product, options);
+        res.send(result);
+    })
 
 
 
